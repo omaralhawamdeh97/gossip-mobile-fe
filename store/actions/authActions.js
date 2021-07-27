@@ -1,64 +1,67 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import instance from "./instance";
 import * as actionTypes from "./actionsTypes";
 import decode from "jwt-decode";
+import { HOME } from "../../components/Navigation/types";
+
 // ACTIONS
-export const signup = (user, history) => {
+export const signup = (user, navigation, setError) => {
   return async (dispatch) => {
     try {
       const res = await instance.post("/signup", user);
       dispatch(setUser(res.data.token));
-      history.push("/");
+      navigation.navigate(HOME);
     } catch (error) {
-      console.log(error);
+      if (error.message.includes("500")) {
+        setError(error.message);
+      }
     }
   };
 };
-export const signin = (user, history) => {
+export const signin = (user, navigation, setError) => {
   return async (dispatch) => {
     try {
       const res = await instance.post("/signin", user);
       console.log(res.data);
       dispatch(setUser(res.data.token));
-      history.push("/");
+      navigation.navigate(HOME);
     } catch (error) {
-      console.log(error);
+      if (error.message.includes("401")) {
+        setError(error.message);
+      }
     }
   };
 };
-export const signout = (history) => {
+export const signout = () => {
   localStorage.removeItem("myToken");
-  history.push("/");
   return {
     type: actionTypes.SET_USER,
     payload: null,
   };
 };
-export const checkForToken = () => {
-  const token = localStorage.getItem("myToken");
+export const checkForToken = () => async (dispatch) => {
+  const token = await AsyncStorage.getItem("myToken");
   if (token) {
     const currentTime = Date.now();
     const user = decode(token);
-    if (user.exp > currentTime) {
-      return setUser(token);
-    }
+    if (user.exp > currentTime) return dispatch(setUser(token));
   }
-  return setUser();
+  dispatch(setUser());
 };
-const setUser = (token) => {
+const setUser = (token) => async (dispatch) => {
   if (token) {
-    localStorage.setItem("myToken", token);
+    await AsyncStorage.setItem("myToken", token);
     instance.defaults.headers.common.Authorization = `Bearer ${token}`;
-    return {
+    dispatch({
       type: actionTypes.SET_USER,
       payload: decode(token),
-    };
+    });
   } else {
-    localStorage.removeItem("myToken");
-    delete instance.defaults.headers.common.Authorization;
-    return {
+    await AsyncStorage.removeItem("myToken");
+    dispatch({
       type: actionTypes.SET_USER,
       payload: null,
-    };
+    });
   }
 };
 // export const fetchUsers = () => {
