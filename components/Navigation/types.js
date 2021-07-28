@@ -5,3 +5,6 @@ export const SIGNUP = "SIGNUP";
 
 //Chat
 export const CHAT = "CHAT";
+
+//Message
+export const MESSAGE = "MESSAGE";
