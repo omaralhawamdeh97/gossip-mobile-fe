@@ -5,12 +5,13 @@ import * as types from "./types";
 import Signin from "../Authentication/Signin";
 import Signup from "../Authentication/Signup";
 import Chat from "../Chats";
+import Message from "../Message";
 
 const RootNavigator = () => {
   const { Navigator, Screen } = createStackNavigator();
   return (
     <Navigator
-      initialRouteName={types.CHAT}
+      initialRouteName={types.MESSAGE}
       screenOptions={{ headerShown: false }}
     >
       <Screen
@@ -21,6 +22,7 @@ const RootNavigator = () => {
       <Screen name={types.SIGNIN} component={Signin} />
       <Screen name={types.SIGNUP} component={Signup} />
       <Screen name={types.CHAT} component={Chat} />
+      <Screen name={types.MESSAGE} component={Message} />
     </Navigator>
   );
 };
