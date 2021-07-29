@@ -2,17 +2,15 @@
 import React, { useState } from "react";
 //React Native
 import {
-  Keyboard,
   KeyboardAvoidingView,
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { Image, ScrollView, FlatList } from "react-native";
+import { Image, FlatList } from "react-native";
 //Components
 import MessageCard from "./MessageCard";
 //icons

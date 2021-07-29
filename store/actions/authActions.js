@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import instance from "./instance";
 import * as actionTypes from "./actionsTypes";
 import decode from "jwt-decode";
-import { HOME } from "../../components/Navigation/types";
+import { HOME, PROFILE } from "../../components/Navigation/types";
 
 // ACTIONS
 export const signup = (user, navigation, setError) => {
@@ -24,7 +24,7 @@ export const signin = (user, navigation, setError) => {
       const res = await instance.post("/signin", user);
       console.log(res.data);
       dispatch(setUser(res.data.token));
-      navigation.navigate(HOME);
+      navigation.navigate(PROFILE);
     } catch (error) {
       if (error.message.includes("401")) {
         setError(error.message);
