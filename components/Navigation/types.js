@@ -8,3 +8,6 @@ export const CHAT = "CHAT";
 
 //Message
 export const MESSAGE = "MESSAGE";
+
+//Profile
+export const PROFILE = "PROFILE";
