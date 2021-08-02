@@ -14,12 +14,11 @@ const authReducer = (state = initialState, action) => {
         user: action.payload,
         loading: false,
       };
-    // case actionTypes.FETCH_USERS:
-    //   return {
-    //     ...state,
-    //     users: action.payload,
-    //     loading: false,
-    //   };
+    case actionTypes.FOUND_USER:
+      return {
+        ...state,
+        user: action.payload,
+      };
     default:
       return state;
   }

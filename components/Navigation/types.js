@@ -3,8 +3,8 @@ export const HOME = "HOME";
 export const SIGNIN = "SIGNIN";
 export const SIGNUP = "SIGNUP";
 
-//Chat
-export const CHAT = "CHAT";
+//FriendList
+export const FRIENDLIST = "FRIENDLIST";
 
 //Message
 export const MESSAGE = "MESSAGE";

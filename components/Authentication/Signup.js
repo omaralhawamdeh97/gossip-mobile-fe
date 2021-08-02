@@ -1,5 +1,5 @@
+//React
 import React, { useState } from "react";
-
 //Styling
 import {
   ImageBackground,
@@ -9,8 +9,11 @@ import {
   TextInput,
 } from "react-native";
 import { Button } from "native-base";
+//Navigation
 import { SIGNIN } from "../Navigation/types";
+//Redux
 import { useDispatch } from "react-redux";
+//Store
 import { signup } from "../../store/actions/authActions";
 
 const Signup = ({ navigation }) => {
@@ -33,9 +36,10 @@ const Signup = ({ navigation }) => {
           uri: "https://images.unsplash.com/photo-1508615039623-a25605d2b022?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
         }}
       >
+        <Text style={styles.topText}>Sign Up</Text>
         <View style={styles.box}>
           <TextInput
-            style={{ ...styles.input, marginTop: 50 }}
+            style={styles.inputOne}
             placeholder="  Username"
             onChangeText={(username) => setUser({ ...user, username })}
           />
@@ -51,32 +55,17 @@ const Signup = ({ navigation }) => {
             onChangeText={(password) => setUser({ ...user, password })}
           />
           {error ? (
-            <Text
-              style={{
-                color: "red",
-                marginLeft: 20,
-                marginTop: 5,
-              }}
-            >
-              Username already exist!
-            </Text>
+            <Text style={styles.errorText}>Username already exist!</Text>
           ) : (
             <View />
           )}
           <Button onPress={handleSubmit} style={styles.button}>
             Signup
           </Button>
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 15,
-              marginLeft: 15,
-              alignItems: "center",
-            }}
-          >
-            <Text>Already have an account </Text>
+          <View style={styles.bottomText}>
+            <Text>Already have an account! </Text>
             <Text
-              style={{ fontSize: 15, color: "white", marginLeft: 5 }}
+              style={styles.bottonText}
               onPress={() => navigation.navigate(SIGNIN)}
             >
               Sign In
@@ -108,6 +97,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  inputOne: {
+    height: 50,
+    width: "90%",
+    backgroundColor: "#C4C4C4",
+    borderRadius: 5,
+    marginTop: 50,
+    alignSelf: "center",
+    opacity: 0.9,
+    padding: 10,
+  },
   input: {
     height: 50,
     width: "90%",
@@ -131,5 +130,26 @@ const styles = StyleSheet.create({
     width: 310,
     alignSelf: "center",
     marginTop: 30,
+  },
+  topText: {
+    paddingBottom: 50,
+    fontSize: 35,
+    color: "white",
+  },
+  errorText: {
+    color: "red",
+    marginLeft: 20,
+    marginTop: 5,
+  },
+  bottomText: {
+    flexDirection: "row",
+    marginTop: 10,
+    marginLeft: 60,
+    alignItems: "center",
+  },
+  bottonText: {
+    fontSize: 15,
+    color: "white",
+    marginLeft: 5,
   },
 });

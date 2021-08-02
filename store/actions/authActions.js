@@ -2,7 +2,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import instance from "./instance";
 import * as actionTypes from "./actionsTypes";
 import decode from "jwt-decode";
-import { HOME, PROFILE } from "../../components/Navigation/types";
+import {
+  FRIENDLIST,
+  HOME,
+  MESSAGE,
+  PROFILE,
+  SIGNIN,
+} from "../../components/Navigation/types";
 
 // ACTIONS
 export const signup = (user, navigation, setError) => {
@@ -22,9 +28,9 @@ export const signin = (user, navigation, setError) => {
   return async (dispatch) => {
     try {
       const res = await instance.post("/signin", user);
-      console.log(res.data);
+
       dispatch(setUser(res.data.token));
-      navigation.navigate(PROFILE);
+      navigation.navigate(FRIENDLIST);
     } catch (error) {
       if (error.message.includes("401")) {
         setError(error.message);
@@ -32,8 +38,9 @@ export const signin = (user, navigation, setError) => {
     }
   };
 };
-export const signout = () => {
-  localStorage.removeItem("myToken");
+export const signout = (navigation) => {
+  AsyncStorage.removeItem("myToken");
+  navigation.navigate(HOME);
   return {
     type: actionTypes.SET_USER,
     payload: null,
@@ -48,7 +55,7 @@ export const checkForToken = () => async (dispatch) => {
   }
   dispatch(setUser());
 };
-const setUser = (token) => async (dispatch) => {
+export const setUser = (token) => async (dispatch) => {
   if (token) {
     await AsyncStorage.setItem("myToken", token);
     instance.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -64,32 +71,42 @@ const setUser = (token) => async (dispatch) => {
     });
   }
 };
-// export const fetchUsers = () => {
-//   return async (dispatch) => {
-//     try {
-//       const res = await instance.get("/users");
+export const fetchFoundUser = (user) => {
+  return async (dispatch) => {
+    try {
+      const res = await instance.get(`/users/${user.id}`);
 
-//       dispatch({
-//         type: actionTypes.FETCH_USERS,
-//         payload: res?.data,
-//       });
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-// };
+      dispatch({
+        type: actionTypes.FOUND_USER,
+        payload: res?.data,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
 
-// export const updateUser = (body,user) => {
-//   return async (dispatch) => {
-//     try {
-//       const res = await instance.put(`${user.id}`,body);
+export const updateUser = (
+  userProfile,
+  user,
+  setPasswordError,
+  setNameError
+) => {
+  return async (dispatch) => {
+    try {
+      const token = await AsyncStorage.getItem("myToken");
+      instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+      const res = await instance.put(`${user.id}`, userProfile);
 
-//       dispatch({
-//         type: actionTypes.FETCH_USERS,
-//         payload: res.data,
-//       });
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   };
-// };
+      dispatch(setUser(res.data.token));
+    } catch (error) {
+      if (error.message.includes("402")) {
+        setNameError(error.message);
+      } else if (error.message.includes("401")) {
+        setPasswordError(error.message);
+      } else {
+        console.log(error);
+      }
+    }
+  };
+};
