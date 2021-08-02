@@ -1,26 +1,26 @@
+//React
 import React from "react";
-import { Image } from "react-native";
-import { SafeAreaView } from "react-native";
+//Styling
+import { Image, TouchableOpacity } from "react-native";
 import { StyleSheet, Text, View } from "react-native";
 
-const ChatCard = () => {
+const FriendCard = ({ onPress, friend }) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <Image
         style={styles.image}
         source={{
-          uri: "https://i1.sndcdn.com/avatars-jSnZBzVzlzr1h0iZ-XAMVyA-t240x240.jpg",
+          uri: friend.image,
         }}
       />
       <View style={styles.inner}>
-        <Text style={styles.title}>Name</Text>
-        <Text style={styles.message}>helooo meesiiiii</Text>
+        <Text style={styles.title}>{friend.username}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
-export default ChatCard;
+export default FriendCard;
 
 const styles = StyleSheet.create({
   container: {

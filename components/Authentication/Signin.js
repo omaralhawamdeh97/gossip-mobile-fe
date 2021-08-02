@@ -1,4 +1,7 @@
+//React
 import React, { useState } from "react";
+
+//Redux
 import { useDispatch } from "react-redux";
 
 //Styling
@@ -10,7 +13,9 @@ import {
   TextInput,
 } from "react-native";
 import { Button } from "native-base";
+//Navigation
 import { SIGNUP } from "../Navigation/types";
+//Store
 import { signin } from "../../store/actions/authActions";
 
 const Signin = ({ navigation }) => {
@@ -24,7 +29,7 @@ const Signin = ({ navigation }) => {
   const handleSubmit = () => {
     dispatch(signin(user, navigation, setError));
   };
-  console.log(error);
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -44,21 +49,13 @@ const Signin = ({ navigation }) => {
           />
 
           <TextInput
-            style={{ ...styles.inputOne, marginTop: 20 }}
+            style={styles.input}
             placeholder="  Password"
             secureTextEntry={true}
             onChangeText={(password) => setUser({ ...user, password })}
           />
           {error ? (
-            <Text
-              style={{
-                color: "red",
-                marginLeft: 20,
-                marginTop: 5,
-              }}
-            >
-              Invalid username and password!
-            </Text>
+            <Text style={styles.textRed}>Invalid username and password!</Text>
           ) : (
             <View />
           )}
@@ -66,17 +63,10 @@ const Signin = ({ navigation }) => {
           <Button onPress={handleSubmit} style={styles.button}>
             Signin
           </Button>
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 15,
-              marginLeft: 15,
-              alignItems: "center",
-            }}
-          >
-            <Text>I'm a new user</Text>
+          <View style={styles.bottomView}>
+            <Text>Don't have an account!</Text>
             <Text
-              style={{ fontSize: 15, color: "white", marginLeft: 5 }}
+              style={styles.bottomText}
               onPress={() => navigation.navigate(SIGNUP)}
             >
               Sign Up
@@ -118,6 +108,16 @@ const styles = StyleSheet.create({
     opacity: 0.9,
     paddingLeft: 10,
   },
+  input: {
+    height: 50,
+    width: "90%",
+    backgroundColor: "#C4C4C4",
+    borderRadius: 5,
+    marginTop: 20,
+    alignSelf: "center",
+    opacity: 0.9,
+    paddingLeft: 10,
+  },
 
   button: {
     backgroundColor: "#5B5B5B",
@@ -128,7 +128,24 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   topText: {
+    paddingBottom: 65,
     fontSize: 35,
     color: "white",
+  },
+  textRed: {
+    color: "red",
+    marginLeft: 20,
+    marginTop: 5,
+  },
+  bottomView: {
+    flexDirection: "row",
+    marginTop: 10,
+    marginLeft: 60,
+    alignItems: "center",
+  },
+  bottomText: {
+    fontSize: 15,
+    color: "white",
+    marginLeft: 5,
   },
 });

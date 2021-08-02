@@ -23,20 +23,15 @@ const Message = () => {
   const dispatch = useDispatch();
   const [body, setBody] = useState({ body: "" });
 
-  const messages = useSelector((state) => state.messageReducer.messages);
-
   const handleMessage = () => {
-    console.log("hii");
     dispatch(addMessage(body));
     setBody("");
   };
   const renderItem = (message) => {
-    console.log(message);
     return <MessageCard message={message.item} />;
   };
   return (
     <View style={styles.container}>
-      {/* <ScrollView> */}
       <View style={styles.head}>
         <SafeAreaView />
         <Image
@@ -48,10 +43,8 @@ const Message = () => {
         <Text style={styles.title}>Hakem</Text>
       </View>
 
-      {/* <View style={styles.card}>{messageList}</View> */}
-      {/* </ScrollView> */}
       <FlatList
-        data={messages}
+        data={[{}]}
         renderItem={renderItem}
         keyExtractor={(message) => message.id}
       />

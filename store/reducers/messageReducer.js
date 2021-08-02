@@ -15,9 +15,10 @@ const messageReducer = (state = initialState, action) => {
       };
 
     case actionTypes.FETCH_MESSAGES:
+      const messagesList = action.payload;
       return {
         ...state,
-        messages: action.payload,
+        messages: messagesList,
         loading: false,
       };
     default:

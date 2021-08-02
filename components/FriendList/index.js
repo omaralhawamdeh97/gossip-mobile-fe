@@ -1,39 +1,62 @@
 //React
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 //Icons
 import { Entypo } from "@expo/vector-icons";
 //ReactNative
 import { SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { TouchableOpacity } from "react-native";
 import { TextInput } from "react-native";
 import { ScrollView } from "react-native";
 import ModalDropdown from "react-native-modal-dropdown";
 //Components
-import ChatCard from "./ChatCard";
-import { HOME, SIGNIN, SIGNUP } from "../Navigation/types";
+import FriendCard from "./FriendCard";
+import { HOME, MESSAGE, PROFILE, SIGNIN, SIGNUP } from "../Navigation/types";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchFoundUser, signout } from "../../store/actions/authActions";
+import Home from "../Home";
 
-const Chat = ({ navigation }) => {
+const FriendList = ({ navigation }) => {
+  const dispatch = useDispatch();
   //States
+  const user = useSelector((state) => state.authReducer.user);
+  var input;
+  useEffect(() => {
+    dispatch(fetchFoundUser(user));
+  }, [input]);
+
   const [query, setQuery] = useState("");
+  const { navigate } = navigation;
   const handleChange = (e) => {
     if (e === 0) {
-      navigation.navigate(HOME);
+      navigate(PROFILE);
     } else if (e === 1) {
-      navigation.navigate(SIGNUP);
+      navigate(SIGNUP);
     } else if (e === 2) {
-      navigation.navigate(SIGNIN);
+      navigate(SIGNIN);
+    } else if (e === 3) {
+      dispatch(signout(navigation));
     }
   };
-
+  const navigateToMessage = () => {
+    navigate(MESSAGE);
+  };
+  console.log(user);
+  var friends = [];
+  if (user.from || user.to) {
+    const fromList = user.from.map((friend) => friend);
+    const toList = user.to.map((friend) => friend);
+    friends = [...fromList, ...toList].map((friend) => (
+      <FriendCard friend={friend} onPress={navigateToMessage} />
+    ));
+  }
   return (
     <View style={styles.container}>
       <SafeAreaView />
       <View style={styles.header}>
         <Text style={styles.title}>Gossipies</Text>
         <ModalDropdown
-          options={["Profile", "Add friend", "New Group"]}
+          options={["Profile", "Add friend", "New Group", "Sign Out"]}
           style={{ width: "30%" }}
-          dropdownStyle={{ height: "15%", backgroundColor: "rgb(0,0,0)" }}
+          dropdownStyle={{ height: "20%", backgroundColor: "rgb(0,0,0)" }}
           saveScrollPosition={false}
           onSelect={handleChange}
         >
@@ -53,29 +76,12 @@ const Chat = ({ navigation }) => {
       <View
         style={{ borderBottomWidth: 1, borderBottomColor: "rgb(80,80,80)" }}
       />
-      <ScrollView>
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-        <ChatCard />
-      </ScrollView>
+      <ScrollView>{friends}</ScrollView>
     </View>
   );
 };
 
-export default Chat;
+export default FriendList;
 
 const styles = StyleSheet.create({
   container: {

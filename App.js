@@ -4,6 +4,7 @@ import { NativeBaseProvider } from "native-base";
 import { Provider } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 import RootNavigator from "./components/Navigation";
+import { ActivityIndicator } from "react-native";
 export default function App() {
   return (
     <Provider store={store}>
